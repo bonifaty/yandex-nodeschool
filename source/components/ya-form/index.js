@@ -9,6 +9,7 @@ class YaForm extends Component {
         super();
         this.state = {
             formTriedSubmit: false,
+            formIsValid: false,
             formIsInProgress: false
         };
 
@@ -47,15 +48,34 @@ class YaForm extends Component {
                 isValid
             }
         });
-        console.log(this.state);
+    }
+
+    isFormValid () {
+        const invalidFields = this.formFields
+            .map((field) => field.name)
+            .filter((name) => !this.state[name].isValid);
+
+        return invalidFields.length === 0;
+    }
+
+    getFormData () {
+        return this.formFields
+            .map((field) => field.name)
+            .reduce((acc, name) => {
+                    acc[name] = this.state[name].value;
+                    return acc;
+                }, {});
     }
 
     handleSubmit (e) {
+        e.preventDefault();
         this.setState({
             formTriedSubmit: true
         });
-        e.preventDefault();
-        console.log('Here we go!');
+
+        if (this.isFormValid()) {
+            console.log(this.getFormData())
+        }
     }
 
     render(props, state) {
@@ -75,7 +95,7 @@ class YaForm extends Component {
                     </div>
                     <form id='myForm' noValidate={true} onSubmit={this.handleSubmit}>
                         {this.formFields.map((field) => {
-                            return <div className={b('row')}>
+                            return <div className={b('row')} key={field.name}>
                                 <TextInput
                                     showValidation={state.formTriedSubmit}
                                     name={field.name}

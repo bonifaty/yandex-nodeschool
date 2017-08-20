@@ -9,11 +9,17 @@ class YaForm extends Component {
         super();
         this.state = {
             formTriedSubmit: false,
-            formIsInProgress: false
+            formIsInProgress: false,
+            testError: false,
+            fetchCounter: 0,
+            resultMessage: ''
         };
 
         this.handleInputUpdate = this.handleInputUpdate.bind(this);
+        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.sendApiRequest = this.sendApiRequest.bind(this);
+        this.handleApiResponse = this.handleApiResponse.bind(this);
 
         this.formFields = [
             {
@@ -67,18 +73,44 @@ class YaForm extends Component {
     }
 
     handleApiResponse (response) {
-        console.log(response);
+        switch (response.status) {
+            case 'success':
+                this.setState({
+                    fetchCounter: 0,
+                    formIsInProgress: false,
+                    resultMessage: 'Success'
+                });
+                break;
+            case 'progress':
+                this.setState({
+                    fetchCounter: this.state.fetchCounter + 1
+                });
+                setTimeout(this.sendApiRequest, response.timeout);
+                break;
+            case 'error':
+                this.setState({
+                    fetchCounter: 0,
+                    formIsInProgress: false,
+                    resultMessage: response.reason
+                });
+                break;
+            default:
+                break;
+        }
     }
 
-    sendApiRequest (params) {
-        let url = '/api/success.json';
+    sendApiRequest () {
+        const params = this.getFormData();
+        let url = `/api/${this.state.fetchCounter > 2 ? (this.state.testError ? 'error' : 'success') : 'progress'}.json`;
         const paramKeys = Object.keys(params);
 
         paramKeys.forEach((key, index) => {
             url += `${index === 0 ? '?' : ''}${key}=${encodeURIComponent(params[key])}${paramKeys.length !== index + 1 ? '&' : ''}`;
         });
 
-        fetch(url).then(this.handleApiResponse);
+        fetch(url)
+            .then((resp) => resp.json())
+            .then(this.handleApiResponse);
     }
 
     handleSubmit (e) {
@@ -92,8 +124,14 @@ class YaForm extends Component {
                 formIsInProgress: true
             });
 
-            this.sendApiRequest(this.getFormData());
+            this.sendApiRequest();
         }
+    }
+
+    handleCheckboxChange (event) {
+        this.setState({
+            testError: event.target.checked
+        })
     }
 
     render(props, state) {
@@ -128,10 +166,14 @@ class YaForm extends Component {
 
                         <div className={b('actions')}>
                             <button className={b('button')} id='submitButton' disabled={state.formIsInProgress}>Поехали!</button>
+                            <input
+                                onChange={this.handleCheckboxChange}
+                                checked={state.testError}
+                                type="checkbox"/>
                         </div>
                     </form>
 
-                    <div id='resultContainer' className={b('result')} />
+                    <div id='resultContainer' className={b('result')}>{state.resultMessage}</div>
                 </div>
             </div>
         </div>

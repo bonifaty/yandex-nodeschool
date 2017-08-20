@@ -1,7 +1,6 @@
 var webpack = require('webpack');
 var path = require('path');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env) => ({
     entry: {
@@ -10,7 +9,7 @@ module.exports = (env) => ({
         ]
     },
     output: {
-        path: __dirname + "/docs",
+        path: __dirname + "/",
         filename: "[name].js"
     },
     module: {
@@ -40,13 +39,9 @@ module.exports = (env) => ({
             }
         ]
     },
-    plugins: [
-        new CopyWebpackPlugin([
-            { from: 'source/api', to: 'api' }
-        ])
-    ].concat(env && env.prod ? [new UglifyJSPlugin()] : []),
+    plugins: [].concat(env && env.prod ? [new UglifyJSPlugin()] : []),
     devServer: {
-        contentBase: './docs',
+        contentBase: './',
         host: '0.0.0.0',
         port: 8080
     },

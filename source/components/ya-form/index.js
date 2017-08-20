@@ -10,7 +10,7 @@ class YaForm extends Component {
         super();
         this.formFields = fields;
         this.state = {
-            formAction: '/api/progress.json',
+            formAction: 'progress.json',
             showValidation: false,
             formIsInProgress: false,
             testError: false,
@@ -19,36 +19,22 @@ class YaForm extends Component {
             resultMessage: ''
         };
 
+        this.formFields.forEach((field) => {
+            this.state[field.name] = {
+                value: ''
+            }
+        });
+
         this.handleInputUpdate = this.handleInputUpdate.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.sendApiRequest = this.sendApiRequest.bind(this);
         this.handleApiResponse = this.handleApiResponse.bind(this);
 
-        this.formFields
-            .forEach((field) => {
-                this.state[field.name] = {
-                    value: '',
-                    isValid: false
-                }
-            });
-
+        // Connect window.MyForm API
         window.MyForm = {
             validate: this.validate.bind(this),
             getData: this.getFormData.bind(this),
-            setData: (obj) => {
-                Object.keys(obj).forEach((key) => {
-                    if (this.formFields.map((field) => field.name).indexOf(key) >= 0) {
-                        this.setState({
-                            [key]: {
-                                value: obj[key]
-                            }
-                        }, () => {
-                            const event = new Event('input:setvalue');
-                            document.querySelector(`input[name='${key}']`).dispatchEvent(event);
-                        });
-                    }
-                });
-            },
+            setData: this.setFormData.bind(this),
             submit: this.submitForm
         };
     }
@@ -80,6 +66,21 @@ class YaForm extends Component {
             isValid: invalidFields.length === 0,
             errorFields: invalidFields
         }
+    }
+
+    setFormData (obj) {
+        Object.keys(obj).forEach((key) => {
+            if (this.formFields.map((field) => field.name).indexOf(key) >= 0) {
+                this.setState({
+                    [key]: {
+                        value: obj[key]
+                    }
+                }, () => {
+                    const event = new Event('input:setvalue');
+                    document.querySelector(`input[name='${key}']`).dispatchEvent(event);
+                });
+            }
+        });
     }
 
     getFormData () {
@@ -124,7 +125,7 @@ class YaForm extends Component {
 
     sendApiRequest () {
         this.setState({
-            formAction: `/api/${this.state.fetchCounter > 2 ? (this.state.testError ? 'error' : 'success') : 'progress'}.json`
+            formAction: `${this.state.fetchCounter > 2 ? (this.state.testError ? 'error' : 'success') : 'progress'}.json`
         });
 
         let url = this.state.formAction;

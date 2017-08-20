@@ -7,20 +7,22 @@ class TextInput extends Component {
         super();
         this.state = {
             value: '',
-            showError: false
+            isValid: true
         };
 
         this.handleInput = this.handleInput.bind(this);
     }
 
-    handleInput (event) {
-        let isValid;
-        const { value, validity } = event.target;
-        const { maxDigitsSum } = this.props;
+    componentDidMount () {
+        this.handleInput();
+    }
 
-        if (validity.valid) {
-            isValid = true;
-        }
+    handleInput () {
+        let isValid;
+        const { name, value, validity } = this._input;
+        const { maxDigitsSum, onUpdate } = this.props;
+
+        isValid = validity.valid;
 
         if (maxDigitsSum && value.length > 0) {
             const filteredValue = value.replace( /[^\d]*/g, '');
@@ -33,20 +35,28 @@ class TextInput extends Component {
 
         this.setState({
             value: value,
-            showError: !isValid
+            isValid: isValid
         });
+
+        onUpdate(name, value, isValid);
     }
 
     render(props, state) {
-        return <div className={b({'error': state.showError})}>
+        return <div className={b({
+                    'error': !state.isValid && props.showValidation,
+                    'highlight-correct': props.showValidation
+                })}>
             <input
+                ref={(c) => this._input = c}
                 className={b('control')}
+                name={props.name}
                 value={state.value}
                 onInput={this.handleInput}
                 required={true}
                 type={props.type ? props.type : 'text'}
                 placeholder={props.placeholder}
                 pattern={props.pattern} />
+            <div className={b('suggestion')}>{props.suggestion}</div>
         </div>
     }
 }

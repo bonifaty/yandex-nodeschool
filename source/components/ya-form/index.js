@@ -5,7 +5,31 @@ const b = require('b_').with('ya-form');
 import TextInput from '../text-input';
 
 class YaForm extends Component {
+    constructor () {
+        super();
+        this.state = {
+            formTriedSubmit: false,
+            formIsInProgress: false
+        };
+
+        this.handleInputUpdate = this.handleInputUpdate.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleInputUpdate (name, value, isValid) {
+        this.setState({
+            [name]: {
+                value,
+                isValid
+            }
+        });
+        console.log(this.state);
+    }
+
     handleSubmit (e) {
+        this.setState({
+            formTriedSubmit: true
+        });
         e.preventDefault();
         console.log('Here we go!');
     }
@@ -28,24 +52,33 @@ class YaForm extends Component {
                     <form id='myForm' noValidate={true} onSubmit={this.handleSubmit}>
                         <div className={b('row')}>
                             <TextInput
+                                showValidation={state.formTriedSubmit}
                                 name='fio'
                                 placeholder='ФИО'
-                                pattern='^[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+$'/>
+                                pattern='^[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+$'
+                                suggestion='Ровно три слова'
+                                onUpdate={this.handleInputUpdate} />
                         </div>
                         <div className={b('row')}>
                             <TextInput
+                                showValidation={state.formTriedSubmit}
                                 name='email'
                                 type='email'
                                 placeholder='Email'
-                                pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$'/>
+                                pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$'
+                                suggestion='Tолько в доменах ya.ru, yandex.ru, yandex.ua, yandex.by, yandex.kz, yandex.com'
+                                onUpdate={this.handleInputUpdate} />
                         </div>
                         <div className={b('row')}>
                             <TextInput
+                                showValidation={state.formTriedSubmit}
                                 name='phone'
                                 type='phone'
                                 placeholder='Телефон'
                                 pattern='^(\+7)(\(\d{3}\)\d{3}-\d{2}-\d{2})$'
-                                maxDigitsSum='30' />
+                                maxDigitsSum='30'
+                                suggestion='Формат: +7(999)999-99-99, сумма цифр не должна превышать 30'
+                                onUpdate={this.handleInputUpdate} />
                         </div>
 
                         <div className={b('actions')}>

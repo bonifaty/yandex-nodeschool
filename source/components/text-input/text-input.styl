@@ -1,11 +1,9 @@
 @import '../../shared/mixins.styl';
 
 .text-input
-    background-color #f0f0f0
-
     &__control
         box-sizing border-box
-        padding 4px 8px
+        padding 8px 12px
         width 100%
         border 1px solid #ececec
         font(14px, 400, 1.4)
@@ -13,8 +11,17 @@
             outline-color #fecd2f
             outline-width 3px
 
+    &_highlight-correct &__control:focus
+        outline-color yellowgreen
+
     &_error &__control
         border 1px solid #e61400
 
         &:focus
             outline-color #e61400
+
+    &__suggestion
+        font(12px, 300, 1.2)
+        color #b7b7b7
+        padding 2px 4px
+        margin-top 3px

@@ -43,7 +43,35 @@ class YaForm extends Component {
                 maxDigitsSum: '30',
                 suggestion: 'Формат: +7(999)999-99-99, сумма цифр не должна превышать 30',
             }
-        ]
+        ];
+
+        this.formFields
+            .forEach((field) => {
+                this.state[field.name] = {
+                    value: '',
+                    isValid: undefined
+                }
+            });
+
+        window.MyForm = {
+            validate: () => {
+                return {
+                    isValid: this.isFormValid(),
+                }
+            },
+            getData: this.getFormData.bind(this),
+            setData: (obj) => {
+                Object.keys(obj).forEach((key) => {
+                    if (this.formFields.map((field) => field.name).indexOf(key) >= 0) {
+                        this.setState({
+                            [key]: {
+                                value: obj[key]
+                            }
+                        });
+                    }
+                });
+            }
+        };
     }
 
     handleInputUpdate (name, value, isValid) {
@@ -156,6 +184,7 @@ class YaForm extends Component {
                                     showValidation={state.formTriedSubmit}
                                     name={field.name}
                                     type={field.type}
+                                    value={state[field.name].value}
                                     placeholder={field.placeholder}
                                     pattern={field.pattern}
                                     maxDigitsSum={field.maxDigitsSum}

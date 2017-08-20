@@ -13,10 +13,6 @@ class TextInput extends Component {
         this.handleInput = this.handleInput.bind(this);
     }
 
-    componentDidMount () {
-        this.handleInput();
-    }
-
     handleInput () {
         let isValid;
         const { name, value, validity } = this._input;
@@ -34,7 +30,6 @@ class TextInput extends Component {
         }
 
         this.setState({
-            value: value,
             isValid: isValid
         });
 
@@ -50,7 +45,7 @@ class TextInput extends Component {
                 ref={(c) => this._input = c}
                 className={b('control')}
                 name={props.name}
-                value={state.value}
+                value={props.value}
                 onInput={this.handleInput}
                 required={true}
                 type={props.type ? props.type : 'text'}

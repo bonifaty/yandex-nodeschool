@@ -14,6 +14,30 @@ class YaForm extends Component {
 
         this.handleInputUpdate = this.handleInputUpdate.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+
+        this.formFields = [
+            {
+                name: 'fio',
+                placeholder: 'ФИО',
+                pattern: '^[a-zA-Zа-яА-Я]+\\s[a-zA-Zа-яА-Я]+\\s[a-zA-Zа-яА-Я]+$',
+                suggestion: 'Ровно три слова'
+            },
+            {
+                name: 'email',
+                type: 'email',
+                placeholder: 'Email',
+                pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$',
+                suggestion: 'Tолько в доменах ya.ru, yandex.ru, yandex.ua, yandex.by, ,yandex.kz, yandex.com'
+            },
+            {
+                name: 'phone',
+                type: 'phone',
+                placeholder: 'Телефон',
+                pattern: '^(\\+7)(\\(\\d{3}\\)\\d{3}-\\d{2}-\\d{2})$',
+                maxDigitsSum: '30',
+                suggestion: 'Формат: +7(999)999-99-99, сумма цифр не должна превышать 30',
+            }
+        ]
     }
 
     handleInputUpdate (name, value, isValid) {
@@ -50,36 +74,19 @@ class YaForm extends Component {
                         </svg>
                     </div>
                     <form id='myForm' noValidate={true} onSubmit={this.handleSubmit}>
-                        <div className={b('row')}>
-                            <TextInput
-                                showValidation={state.formTriedSubmit}
-                                name='fio'
-                                placeholder='ФИО'
-                                pattern='^[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+$'
-                                suggestion='Ровно три слова'
-                                onUpdate={this.handleInputUpdate} />
-                        </div>
-                        <div className={b('row')}>
-                            <TextInput
-                                showValidation={state.formTriedSubmit}
-                                name='email'
-                                type='email'
-                                placeholder='Email'
-                                pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$'
-                                suggestion='Tолько в доменах ya.ru, yandex.ru, yandex.ua, yandex.by, yandex.kz, yandex.com'
-                                onUpdate={this.handleInputUpdate} />
-                        </div>
-                        <div className={b('row')}>
-                            <TextInput
-                                showValidation={state.formTriedSubmit}
-                                name='phone'
-                                type='phone'
-                                placeholder='Телефон'
-                                pattern='^(\+7)(\(\d{3}\)\d{3}-\d{2}-\d{2})$'
-                                maxDigitsSum='30'
-                                suggestion='Формат: +7(999)999-99-99, сумма цифр не должна превышать 30'
-                                onUpdate={this.handleInputUpdate} />
-                        </div>
+                        {this.formFields.map((field) => {
+                            return <div className={b('row')}>
+                                <TextInput
+                                    showValidation={state.formTriedSubmit}
+                                    name={field.name}
+                                    type={field.type}
+                                    placeholder={field.placeholder}
+                                    pattern={field.pattern}
+                                    maxDigitsSum={field.maxDigitsSum}
+                                    suggestion={field.suggestion}
+                                    onUpdate={this.handleInputUpdate} />
+                            </div>;
+                        })}
 
                         <div className={b('actions')}>
                             <button id='submitButton'>Поехали!</button>

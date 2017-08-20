@@ -44,7 +44,7 @@ class TextInput extends Component {
     render(props, state) {
         return <div className={b({
                     'error': !state.isValid && props.showValidation,
-                    'highlight-correct': props.showValidation
+                    'correct': state.isValid
                 })}>
             <input
                 ref={(c) => this._input = c}

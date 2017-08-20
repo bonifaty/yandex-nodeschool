@@ -3,14 +3,14 @@ export default [
         name: 'fio',
         placeholder: 'ФИО',
         pattern: '^[a-zA-Zа-яА-Я]+\\s[a-zA-Zа-яА-Я]+\\s[a-zA-Zа-яА-Я]+$',
-        suggestion: 'Ровно три слова'
+        suggestion: 'Формат: Ровно три слова'
     },
     {
         name: 'email',
         type: 'email',
         placeholder: 'Email',
         pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$',
-        suggestion: 'Tолько в доменах ya.ru, yandex.ru, yandex.ua, yandex.by, ,yandex.kz, yandex.com'
+        suggestion: 'Разрешенные домены: ya.ru, yandex.ru, yandex.ua, yandex.by, ,yandex.kz, yandex.com'
     },
     {
         name: 'phone',

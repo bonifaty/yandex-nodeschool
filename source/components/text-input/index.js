@@ -6,8 +6,7 @@ class TextInput extends Component {
     constructor () {
         super();
         this.state = {
-            value: '',
-            isValid: true
+            isValid: undefined
         };
 
         this.handleInput = this.handleInput.bind(this);
@@ -15,6 +14,7 @@ class TextInput extends Component {
 
     componentDidMount () {
         this.handleInput();
+        this._input.addEventListener('input:setvalue', this.handleInput)
     }
 
     handleInput () {
@@ -49,6 +49,7 @@ class TextInput extends Component {
                 className={b('control') + (!state.isValid && props.showValidation ? ' error' : '')}
                 name={props.name}
                 value={props.value}
+                disabled={props.disabled}
                 onInput={this.handleInput}
                 required={true}
                 type={props.type ? props.type : 'text'}

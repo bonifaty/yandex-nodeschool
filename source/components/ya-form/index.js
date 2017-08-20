@@ -11,7 +11,7 @@ class YaForm extends Component {
         this.formFields = fields;
         this.state = {
             formAction: '/api/progress.json',
-            formTriedSubmit: false,
+            showValidation: false,
             formIsInProgress: false,
             testError: false,
             fetchCounter: 0,
@@ -21,7 +21,7 @@ class YaForm extends Component {
 
         this.handleInputUpdate = this.handleInputUpdate.bind(this);
         this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.submitForm = this.submitForm.bind(this);
         this.sendApiRequest = this.sendApiRequest.bind(this);
         this.handleApiResponse = this.handleApiResponse.bind(this);
 
@@ -34,11 +34,7 @@ class YaForm extends Component {
             });
 
         window.MyForm = {
-            validate: () => {
-                return {
-                    isValid: this.isFormValid(),
-                }
-            },
+            validate: this.validate.bind(this),
             getData: this.getFormData.bind(this),
             setData: (obj) => {
                 Object.keys(obj).forEach((key) => {
@@ -47,13 +43,14 @@ class YaForm extends Component {
                             [key]: {
                                 value: obj[key]
                             }
+                        }, () => {
+                            const event = new Event('input:setvalue');
+                            document.querySelector(`input[name='${key}']`).dispatchEvent(event);
                         });
-                        /*const event = new Event('input', { bubbles: true });
-                        document.querySelector(`input[name='${key}']`).dispatchEvent(event);*/
                     }
                 });
             },
-            submit: this.submitForm.bind(this)
+            submit: this.submitForm
         };
     }
 
@@ -66,12 +63,24 @@ class YaForm extends Component {
         });
     }
 
-    isFormValid () {
-        const invalidFields = this.formFields
+    getErrorFields () {
+        return this.formFields
             .map((field) => field.name)
             .filter((name) => !this.state[name].isValid);
+    }
 
-        return invalidFields.length === 0;
+    validate () {
+        this.setState({
+            showValidation: true,
+            resultStatus: '',
+            resultMessage: ''
+        });
+
+        const invalidFields = this.getErrorFields();
+        return {
+            isValid: invalidFields.length === 0,
+            errorFields: invalidFields
+        }
     }
 
     getFormData () {
@@ -96,6 +105,7 @@ class YaForm extends Component {
             case 'progress':
                 this.setState({
                     resultStatus: 'progress',
+                    resultMessage: 'Работаем...',
                     fetchCounter: this.state.fetchCounter + 1
                 });
                 setTimeout(this.sendApiRequest, response.timeout);
@@ -131,19 +141,11 @@ class YaForm extends Component {
             .then(this.handleApiResponse);
     }
 
-    handleSubmit (e) {
-        e.preventDefault();
-        this.submitForm();
-    }
+    submitForm (e) {
+        e && e.preventDefault();
+        const validationResult = this.validate();
 
-    submitForm () {
-        this.setState({
-            formTriedSubmit: true,
-            resultStatus: '',
-            resultMessage: ''
-        });
-
-        if (this.isFormValid()) {
+        if (validationResult.isValid) {
             this.setState({
                 formIsInProgress: true
             });
@@ -173,11 +175,11 @@ class YaForm extends Component {
                             <circle cx="100" cy="100" r="100"/>
                         </svg>
                     </div>
-                    <form id='myForm' action={state.formAction} noValidate={true} onSubmit={this.handleSubmit}>
+                    <form id='myForm' action={state.formAction} noValidate={true} onSubmit={this.submitForm}>
                         {this.formFields.map((field) => {
                             return <div className={b('row')} key={field.name}>
                                 <TextInput
-                                    showValidation={state.formTriedSubmit}
+                                    showValidation={state.showValidation}
                                     name={field.name}
                                     type={field.type}
                                     value={state[field.name].value}
@@ -185,6 +187,7 @@ class YaForm extends Component {
                                     pattern={field.pattern}
                                     maxDigitsSum={field.maxDigitsSum}
                                     suggestion={field.suggestion}
+                                    disabled={state.formIsInProgress}
                                     onUpdate={this.handleInputUpdate} />
                             </div>;
                         })}
@@ -194,7 +197,7 @@ class YaForm extends Component {
                         </div>
                     </form>
 
-                    <div id='resultContainer' className={b('result')}>{state.resultMessage}</div>
+                    <div id='resultContainer' className={b('result') + ' ' + state.resultStatus}>{state.resultMessage}</div>
                 </div>
             </div>
             <div className={b('footer')}>

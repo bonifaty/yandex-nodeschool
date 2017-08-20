@@ -50,8 +50,18 @@
 
     &__result
         font(12px, 300, 1.5)
+        height 18px
+        overflow hidden
         margin-top 10px
-        color #0e8dce
+
+        &.progress
+            color $blue
+
+        &.success
+            color $green
+
+        &.error
+            color $red
 
     &__footer
         background-color #747474

@@ -1,6 +1,7 @@
 var webpack = require('webpack');
 var path = require('path');
 var UglifyJSPlugin = require('uglifyjs-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env) => ({
     entry: {
@@ -39,9 +40,11 @@ module.exports = (env) => ({
             }
         ]
     },
-    plugins: env && env.prod ? [
-        new UglifyJSPlugin()
-    ] : [],
+    plugins: [
+        new CopyWebpackPlugin([
+            { from: 'source/api', to: 'api' }
+        ])
+    ].concat(env && env.prod ? [new UglifyJSPlugin()] : []),
     devServer: {
         contentBase: './docs',
         host: '0.0.0.0',

@@ -66,6 +66,21 @@ class YaForm extends Component {
                 }, {});
     }
 
+    handleApiResponse (response) {
+        console.log(response);
+    }
+
+    sendApiRequest (params) {
+        let url = '/api/success.json';
+        const paramKeys = Object.keys(params);
+
+        paramKeys.forEach((key, index) => {
+            url += `${index === 0 ? '?' : ''}${key}=${encodeURIComponent(params[key])}${paramKeys.length !== index + 1 ? '&' : ''}`;
+        });
+
+        fetch(url).then(this.handleApiResponse);
+    }
+
     handleSubmit (e) {
         e.preventDefault();
         this.setState({
@@ -77,12 +92,7 @@ class YaForm extends Component {
                 formIsInProgress: true
             });
 
-            setTimeout(() => {
-                this.setState({
-                    formIsInProgress: false
-                });
-            }, 1500);
-            console.log(this.getFormData())
+            this.sendApiRequest(this.getFormData());
         }
     }
 

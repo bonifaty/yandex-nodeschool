@@ -13,6 +13,10 @@ class TextInput extends Component {
         this.handleInput = this.handleInput.bind(this);
     }
 
+    componentDidMount () {
+        this.handleInput();
+    }
+
     handleInput () {
         let isValid;
         const { name, value, validity } = this._input;

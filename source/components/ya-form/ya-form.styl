@@ -26,7 +26,24 @@
         size(40px)
 
     &__row
-        margin-top 10px
+        margin-top 15px
 
     &__actions
-        margin-top: 20px
+        margin-top: 30px
+
+    &__button
+        -webkit-appearance none
+        border-width 0
+        background-color $yellow
+        padding 10px 20px
+        font(14px, 300, 1)
+
+        &:hover
+            background-color lighten($yellow, 15%)
+            cursor pointer
+
+        &:focus
+            outline none
+
+        &:disabled
+            background-color #cbcbcb

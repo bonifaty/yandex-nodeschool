@@ -9,7 +9,6 @@ class YaForm extends Component {
         super();
         this.state = {
             formTriedSubmit: false,
-            formIsValid: false,
             formIsInProgress: false
         };
 
@@ -74,6 +73,15 @@ class YaForm extends Component {
         });
 
         if (this.isFormValid()) {
+            this.setState({
+                formIsInProgress: true
+            });
+
+            setTimeout(() => {
+                this.setState({
+                    formIsInProgress: false
+                });
+            }, 1500);
             console.log(this.getFormData())
         }
     }
@@ -109,11 +117,11 @@ class YaForm extends Component {
                         })}
 
                         <div className={b('actions')}>
-                            <button id='submitButton'>Поехали!</button>
+                            <button className={b('button')} id='submitButton' disabled={state.formIsInProgress}>Поехали!</button>
                         </div>
                     </form>
 
-                    <div id='resultContainer' className={b('result')}></div>
+                    <div id='resultContainer' className={b('result')} />
                 </div>
             </div>
         </div>

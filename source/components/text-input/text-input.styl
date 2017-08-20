@@ -1,10 +1,20 @@
+@import '../../shared/mixins.styl';
+
 .text-input
     background-color #f0f0f0
-
-    &_error
-        border 1px solid #e61400
 
     &__control
         box-sizing border-box
         padding 4px 8px
         width 100%
+        border 1px solid #ececec
+        font(14px, 400, 1.4)
+        &:focus
+            outline-color #fecd2f
+            outline-width 3px
+
+    &_error &__control
+        border 1px solid #e61400
+
+        &:focus
+            outline-color #e61400

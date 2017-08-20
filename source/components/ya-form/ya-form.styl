@@ -1,8 +1,26 @@
 @import '../../shared/mixins.styl'
 
 .ya-form
-    padding 20px
-    background-color #f0f0f0
+    background-color white
+
+    &__container
+        container()
+
+    &__label
+        padding 10px 0
+        background-color $red
+        color white
+        font(12px, 400, 1.2)
+
+    &__content
+        padding 20px 0
+
+    &__title
+        font(28px, 400, 1.2)
+        margin-bottom 10px
+
+    &__header
+        margin-bottom 20px
 
     &__header-circle
         size(40px)

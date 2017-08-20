@@ -166,14 +166,21 @@ class YaForm extends Component {
 
                         <div className={b('actions')}>
                             <button className={b('button')} id='submitButton' disabled={state.formIsInProgress}>Поехали!</button>
-                            <input
-                                onChange={this.handleCheckboxChange}
-                                checked={state.testError}
-                                type="checkbox"/>
                         </div>
                     </form>
 
                     <div id='resultContainer' className={b('result')}>{state.resultMessage}</div>
+                </div>
+            </div>
+            <div className={b('footer')}>
+                <div className={b('container')}>
+                    <label htmlFor='testError'>
+                        <input
+                            id='testError'
+                            onChange={this.handleCheckboxChange}
+                            checked={state.testError}
+                            type="checkbox"/> Тестировать Error ответ
+                    </label>
                 </div>
             </div>
         </div>

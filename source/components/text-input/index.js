@@ -14,10 +14,26 @@ class TextInput extends Component {
     }
 
     handleInput (event) {
-        const { valid } = event.target.validity;
+        let isValid;
+        const { value, validity } = event.target;
+        const { maxDigitsSum } = this.props;
+
+        if (validity.valid) {
+            isValid = true;
+        }
+
+        if (maxDigitsSum && value.length > 0) {
+            const filteredValue = value.replace( /[^\d]*/g, '');
+            const sum = Array.from(filteredValue).reduce((a, b) => parseInt(a) + parseInt(b), 0);
+
+            if (sum > maxDigitsSum) {
+                isValid = false;
+            }
+        }
+
         this.setState({
-            value: event.target.value,
-            showError: !valid
+            value: value,
+            showError: !isValid
         });
     }
 

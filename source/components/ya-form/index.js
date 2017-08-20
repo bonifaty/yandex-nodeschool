@@ -39,7 +39,8 @@ class YaForm extends Component {
                         name='phone'
                         type='phone'
                         placeholder='Телефон'
-                        pattern='^(\+7)(\(\d{3}\)\d{3}-\d{2}-\d{2})$'/>
+                        pattern='^(\+7)(\(\d{3}\)\d{3}-\d{2}-\d{2})$'
+                        maxDigitsSum='30' />
                 </div>
 
                 <div className={b('actions')}>

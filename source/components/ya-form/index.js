@@ -10,10 +10,12 @@ class YaForm extends Component {
         super();
         this.formFields = fields;
         this.state = {
+            formAction: '/api/progress.json',
             formTriedSubmit: false,
             formIsInProgress: false,
             testError: false,
             fetchCounter: 0,
+            resultStatus: '',
             resultMessage: ''
         };
 
@@ -85,6 +87,7 @@ class YaForm extends Component {
         switch (response.status) {
             case 'success':
                 this.setState({
+                    resultStatus: 'success',
                     fetchCounter: 0,
                     formIsInProgress: false,
                     resultMessage: 'Success'
@@ -92,12 +95,14 @@ class YaForm extends Component {
                 break;
             case 'progress':
                 this.setState({
+                    resultStatus: 'progress',
                     fetchCounter: this.state.fetchCounter + 1
                 });
                 setTimeout(this.sendApiRequest, response.timeout);
                 break;
             case 'error':
                 this.setState({
+                    resultStatus: 'error',
                     fetchCounter: 0,
                     formIsInProgress: false,
                     resultMessage: response.reason
@@ -109,8 +114,12 @@ class YaForm extends Component {
     }
 
     sendApiRequest () {
+        this.setState({
+            formAction: `/api/${this.state.fetchCounter > 2 ? (this.state.testError ? 'error' : 'success') : 'progress'}.json`
+        });
+
+        let url = this.state.formAction;
         const params = this.getFormData();
-        let url = `/api/${this.state.fetchCounter > 2 ? (this.state.testError ? 'error' : 'success') : 'progress'}.json`;
         const paramKeys = Object.keys(params);
 
         paramKeys.forEach((key, index) => {
@@ -129,7 +138,9 @@ class YaForm extends Component {
 
     submitForm () {
         this.setState({
-            formTriedSubmit: true
+            formTriedSubmit: true,
+            resultStatus: '',
+            resultMessage: ''
         });
 
         if (this.isFormValid()) {
@@ -162,7 +173,7 @@ class YaForm extends Component {
                             <circle cx="100" cy="100" r="100"/>
                         </svg>
                     </div>
-                    <form id='myForm' noValidate={true} onSubmit={this.handleSubmit}>
+                    <form id='myForm' action={state.formAction} noValidate={true} onSubmit={this.handleSubmit}>
                         {this.formFields.map((field) => {
                             return <div className={b('row')} key={field.name}>
                                 <TextInput

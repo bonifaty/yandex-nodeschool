@@ -5,7 +5,7 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = (env) => ({
     entry: {
-        'app': [
+        'index': [
             './source/app.js'
         ]
     },

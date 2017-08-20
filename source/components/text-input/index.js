@@ -42,12 +42,11 @@ class TextInput extends Component {
 
     render(props, state) {
         return <div className={b({
-                    'error': !state.isValid && props.showValidation,
                     'correct': state.isValid
                 })}>
             <input
                 ref={(c) => this._input = c}
-                className={b('control')}
+                className={b('control') + (!state.isValid && props.showValidation ? ' error' : '')}
                 name={props.name}
                 value={props.value}
                 onInput={this.handleInput}
@@ -55,7 +54,7 @@ class TextInput extends Component {
                 type={props.type ? props.type : 'text'}
                 placeholder={props.placeholder}
                 pattern={props.pattern} />
-            <div className={b('suggestion')}>{props.suggestion}</div>
+            <p className={b('suggestion')}>{props.suggestion}</p>
         </div>
     }
 }

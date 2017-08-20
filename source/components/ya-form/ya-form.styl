@@ -6,11 +6,27 @@
     &__container
         container()
 
-    &__label
-        padding 10px 0 30px
+    &__header
+        padding 10px 0
         background-color $red
         color white
         font(12px, 400, 1.5)
+
+    &__header-content
+        display flex
+        width 100%
+        justify-content space-between
+
+    &__label
+        margin-bottom 20px
+
+    &__pics-list
+        display flex
+
+    &__pic
+        display block
+        size(40px)
+        margin-left 5px;
 
     &__content
         padding 20px 0
@@ -18,12 +34,6 @@
     &__title
         font(28px, 400, 1.2)
         margin-bottom 10px
-
-    &__header
-        margin-bottom 20px
-
-    &__header-circle
-        size(40px)
 
     &__row
         margin-top 15px

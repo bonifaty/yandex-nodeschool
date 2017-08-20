@@ -155,19 +155,31 @@ class YaForm extends Component {
 
     render(props, state) {
         return <div className={b()}>
-            <div className={b('label')}>
-                <div className={b('container')}>Yandex</div>
+            <div className={b('header')}>
+                <div className={b('container')}>
+                    <div className={b('header-content')}>
+                        <div className={b('label')}>
+                            Yandex
+                        </div>
+                        <div className={b('pics-list')}>
+                            <svg viewBox="0 0 100 100" className={b('pic')} fill='#fecd2f'>
+                                <polygon points="0,0 100,0 50,100"/>
+                            </svg>
+                            <svg viewBox="0 0 100 100" className={b('pic')} fill='#fecd2f'>
+                                <rect x="0" y="0" width="100" height="100"/>
+                            </svg>
+                            <svg viewBox="0 0 200 200" className={b('pic')} fill='#fecd2f'>
+                                <circle cx="100" cy="100" r="100"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className={b('container')}>
                 <div className={b('content')}>
                     <h1 className={b('title')}>
                         Школа Node.js
                     </h1>
-                    <div className={b('header')}>
-                        <svg viewBox="0 0 200 200" className={b('header-circle')} fill='#fecd2f'>
-                            <circle cx="100" cy="100" r="100"/>
-                        </svg>
-                    </div>
                     <form id='myForm' action={state.formAction} noValidate={true} onSubmit={this.submitForm}>
                         {this.formFields.map((field) => {
                             return <div className={b('row')} key={field.name}>

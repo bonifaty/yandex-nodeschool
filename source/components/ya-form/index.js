@@ -17,21 +17,34 @@ class YaForm extends Component {
                     <circle cx="100" cy="100" r="100"/>
                 </svg>
             </div>
-            <form onSubmit={this.handleSubmit}>
-                <TextInput
-                    name='fio'
-                    type='text'
-                    placeholder='ФИО' />
-                <TextInput
-                    name='email'
-                    type='email'
-                    placeholder='Email' />
-                <TextInput
-                    name='phone'
-                    type='phone'
-                    placeholder='Телефон'/>
+            <h1 className={b('title')}>
+                Школа Node.js
+            </h1>
+            <form noValidate={true} onSubmit={this.handleSubmit}>
+                <div className={b('row')}>
+                    <TextInput
+                        name='fio'
+                        placeholder='ФИО'
+                        pattern='^[a-zA-Zа-яА-Я]+\s[a-zA-Zа-яА-Я]+$'/>
+                </div>
+                <div className={b('row')}>
+                    <TextInput
+                        name='email'
+                        type='email'
+                        placeholder='Email'
+                        pattern='^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$'/>
+                </div>
+                <div className={b('row')}>
+                    <TextInput
+                        name='phone'
+                        type='phone'
+                        placeholder='Телефон'
+                        pattern='^(\+7)(\(\d{3}\)\d{3}-\d{2}-\d{2})$'/>
+                </div>
 
-                <button>Поехали!</button>
+                <div className={b('actions')}>
+                    <button>Поехали!</button>
+                </div>
             </form>
         </div>
     }

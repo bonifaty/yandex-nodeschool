@@ -9,12 +9,11 @@ class YaForm extends Component {
     constructor () {
         super();
         this.formFields = fields;
+        this.serverStatuses = ['progress.json', 'success.json', 'error.json'];
         this.state = {
-            formAction: 'progress.json',
+            formAction: this.serverStatuses[0],
             showValidation: false,
             formIsInProgress: false,
-            testError: false,
-            fetchCounter: 0,
             resultStatus: '',
             resultMessage: ''
         };
@@ -97,7 +96,6 @@ class YaForm extends Component {
             case 'success':
                 this.setState({
                     resultStatus: 'success',
-                    fetchCounter: 0,
                     formIsInProgress: false,
                     resultMessage: 'Success'
                 });
@@ -106,14 +104,12 @@ class YaForm extends Component {
                 this.setState({
                     resultStatus: 'progress',
                     resultMessage: 'Работаем...',
-                    fetchCounter: this.state.fetchCounter + 1
                 });
                 setTimeout(this.sendApiRequest, response.timeout);
                 break;
             case 'error':
                 this.setState({
                     resultStatus: 'error',
-                    fetchCounter: 0,
                     formIsInProgress: false,
                     resultMessage: response.reason
                 });
@@ -124,11 +120,7 @@ class YaForm extends Component {
     }
 
     sendApiRequest () {
-        this.setState({
-            formAction: `${this.state.fetchCounter > 2 ? (this.state.testError ? 'error' : 'success') : 'progress'}.json`
-        });
-
-        let url = this.state.formAction;
+        let url = this._form.getAttribute('action');
         const params = this.getFormData();
         const paramKeys = Object.keys(params);
 
@@ -181,7 +173,7 @@ class YaForm extends Component {
                     <h1 className={b('title')}>
                         Школа Node.js
                     </h1>
-                    <form id='myForm' action={state.formAction} noValidate={true} onSubmit={this.submitForm}>
+                    <form ref={(c) => this._form = c} id='myForm' action={state.formAction} noValidate={true} onSubmit={this.submitForm}>
                         {this.formFields.map((field) => {
                             return <div className={b('row')} key={field.name}>
                                 <TextInput
@@ -208,13 +200,18 @@ class YaForm extends Component {
             </div>
             <div className={b('footer')}>
                 <div className={b('container')}>
-                    <label htmlFor='testError'>
-                        <input
-                            id='testError'
-                            onChange={(e) =>  {this.setState({testError: e.target.checked})}}
-                            checked={state.testError}
-                            type="checkbox"/> Тестировать Error ответ
-                    </label>
+                    <div className={b('footer-content')}>
+                        {this.serverStatuses.map((status) => {
+                            return <label className={b('footer-option')} htmlFor={status} key={status}>
+                                <input
+                                    id={status}
+                                    onChange={(e) =>  {this.setState({formAction: status})}}
+                                    checked={this.state.formAction === status}
+                                    type='radio'
+                                    value={status}/> {status}
+                            </label>
+                        })}
+                    </div>
                 </div>
             </div>
         </div>

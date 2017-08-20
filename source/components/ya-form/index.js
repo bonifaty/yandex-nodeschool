@@ -20,7 +20,6 @@ class YaForm extends Component {
         };
 
         this.handleInputUpdate = this.handleInputUpdate.bind(this);
-        this.handleCheckboxChange = this.handleCheckboxChange.bind(this);
         this.submitForm = this.submitForm.bind(this);
         this.sendApiRequest = this.sendApiRequest.bind(this);
         this.handleApiResponse = this.handleApiResponse.bind(this);
@@ -154,12 +153,6 @@ class YaForm extends Component {
         }
     }
 
-    handleCheckboxChange (event) {
-        this.setState({
-            testError: event.target.checked
-        })
-    }
-
     render(props, state) {
         return <div className={b()}>
             <div className={b('label')}>
@@ -205,7 +198,7 @@ class YaForm extends Component {
                     <label htmlFor='testError'>
                         <input
                             id='testError'
-                            onChange={this.handleCheckboxChange}
+                            onChange={(e) =>  {this.setState({testError: e.target.checked})}}
                             checked={state.testError}
                             type="checkbox"/> Тестировать Error ответ
                     </label>

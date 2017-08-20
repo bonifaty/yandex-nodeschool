@@ -1,5 +1,6 @@
 import { h, Component } from 'preact';
-const b = require('b_').with('text-input');
+import './ya-form.styl';
+const b = require('b_').with('ya-form');
 
 import TextInput from '../text-input';
 
@@ -11,6 +12,11 @@ class YaForm extends Component {
 
     render(props, state) {
         return <div className={b()}>
+            <div className={b('header')}>
+                <svg viewBox="0 0 200 200" className={b('header-circle')} fill='#fecd2f'>
+                    <circle cx="100" cy="100" r="100"/>
+                </svg>
+            </div>
             <form onSubmit={this.handleSubmit}>
                 <TextInput
                     name='fio'

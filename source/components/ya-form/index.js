@@ -1,4 +1,5 @@
 import { h, Component } from 'preact';
+import fields from './fields';
 import './ya-form.styl';
 const b = require('b_').with('ya-form');
 
@@ -7,6 +8,7 @@ import TextInput from '../text-input';
 class YaForm extends Component {
     constructor () {
         super();
+        this.formFields = fields;
         this.state = {
             formTriedSubmit: false,
             formIsInProgress: false,
@@ -21,35 +23,11 @@ class YaForm extends Component {
         this.sendApiRequest = this.sendApiRequest.bind(this);
         this.handleApiResponse = this.handleApiResponse.bind(this);
 
-        this.formFields = [
-            {
-                name: 'fio',
-                placeholder: 'ФИО',
-                pattern: '^[a-zA-Zа-яА-Я]+\\s[a-zA-Zа-яА-Я]+\\s[a-zA-Zа-яА-Я]+$',
-                suggestion: 'Ровно три слова'
-            },
-            {
-                name: 'email',
-                type: 'email',
-                placeholder: 'Email',
-                pattern: '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@?(ya\.ru|yandex\.ru|yandex\.ua|yandex\.by|yandex\.kz|yandex\.com)$',
-                suggestion: 'Tолько в доменах ya.ru, yandex.ru, yandex.ua, yandex.by, ,yandex.kz, yandex.com'
-            },
-            {
-                name: 'phone',
-                type: 'phone',
-                placeholder: 'Телефон',
-                pattern: '^(\\+7)(\\(\\d{3}\\)\\d{3}-\\d{2}-\\d{2})$',
-                maxDigitsSum: '30',
-                suggestion: 'Формат: +7(999)999-99-99, сумма цифр не должна превышать 30',
-            }
-        ];
-
         this.formFields
             .forEach((field) => {
                 this.state[field.name] = {
                     value: '',
-                    isValid: undefined
+                    isValid: false
                 }
             });
 
@@ -68,9 +46,12 @@ class YaForm extends Component {
                                 value: obj[key]
                             }
                         });
+                        /*const event = new Event('input', { bubbles: true });
+                        document.querySelector(`input[name='${key}']`).dispatchEvent(event);*/
                     }
                 });
-            }
+            },
+            submit: this.submitForm.bind(this)
         };
     }
 
@@ -143,6 +124,10 @@ class YaForm extends Component {
 
     handleSubmit (e) {
         e.preventDefault();
+        this.submitForm();
+    }
+
+    submitForm () {
         this.setState({
             formTriedSubmit: true
         });

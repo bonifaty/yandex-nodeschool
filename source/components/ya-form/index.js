@@ -155,15 +155,9 @@ class YaForm extends Component {
                             Yandex
                         </div>
                         <div className={b('pics-list')}>
-                            <svg viewBox="0 0 100 100" className={b('pic')} fill='#fecd2f'>
-                                <polygon points="0,0 100,0 50,100"/>
-                            </svg>
-                            <svg viewBox="0 0 100 100" className={b('pic')} fill='#fecd2f'>
-                                <rect x="0" y="0" width="100" height="100"/>
-                            </svg>
-                            <svg viewBox="0 0 200 200" className={b('pic')} fill='#fecd2f'>
-                                <circle cx="100" cy="100" r="100"/>
-                            </svg>
+                            <svg viewBox='0 0 10 10' className={b('pic')}><polygon points='0,0 10,0 5,10'/></svg>
+                            <svg viewBox='0 0 10 10' className={b('pic')}><rect x='0' y='0' width='10' height='10'/></svg>
+                            <svg viewBox='0 0 10 10' className={b('pic')}><circle cx='5' cy='5' r='5'/></svg>
                         </div>
                     </div>
                 </div>
@@ -174,17 +168,17 @@ class YaForm extends Component {
                         Школа Node.js
                     </h1>
                     <form ref={(c) => this._form = c} id='myForm' action={state.formAction} noValidate={true} onSubmit={this.submitForm}>
-                        {this.formFields.map((field) => {
-                            return <div className={b('row')} key={field.name}>
+                        {this.formFields.map(({name, type, placeholder, pattern, maxDigitsSum, suggestion}) => {
+                            return <div className={b('row')} key={name}>
                                 <TextInput
                                     showValidation={state.showValidation}
-                                    name={field.name}
-                                    type={field.type}
-                                    value={state[field.name].value}
-                                    placeholder={field.placeholder}
-                                    pattern={field.pattern}
-                                    maxDigitsSum={field.maxDigitsSum}
-                                    suggestion={field.suggestion}
+                                    name={name}
+                                    type={type}
+                                    value={state[name].value}
+                                    placeholder={placeholder}
+                                    pattern={pattern}
+                                    maxDigitsSum={maxDigitsSum}
+                                    suggestion={suggestion}
                                     disabled={state.formIsInProgress}
                                     onUpdate={this.handleInputUpdate} />
                             </div>;
@@ -206,7 +200,7 @@ class YaForm extends Component {
                                 <input
                                     id={status}
                                     onChange={(e) =>  {this.setState({formAction: status})}}
-                                    checked={this.state.formAction === status}
+                                    checked={state.formAction === status}
                                     type='radio'
                                     value={status}/> {status}
                             </label>

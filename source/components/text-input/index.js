@@ -19,10 +19,10 @@ class TextInput extends Component {
 
     handleInput () {
         let isValid;
-        const { name, value, validity } = this._input;
+        const { name, value, checkValidity } = this._input;
         const { maxDigitsSum, onUpdate } = this.props;
 
-        isValid = validity.valid;
+        isValid = checkValidity();
 
         if (maxDigitsSum && value.length > 0) {
             const filteredValue = value.replace( /[^\d]*/g, '');
